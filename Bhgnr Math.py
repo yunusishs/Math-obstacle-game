@@ -89,9 +89,8 @@ def move_operators():
         canvas.move(ender[1], 0, 10)
         enderx=canvas.coords(ender[0])[0]
         endery=canvas.coords(ender[0])[1]
-        print(canvas.coords(x))
-        xx=canvas.coords(x)[0]
-        xy=canvas.coords(x)[1]
+        xx=canvas.coords(mychar)[0]
+        xy=canvas.coords(mychar)[1]
         if enderx > xx:
             canvas.move(ender[0], -1,0)
             canvas.move(ender[1], -1,0)
