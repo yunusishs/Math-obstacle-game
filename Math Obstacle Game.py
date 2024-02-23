@@ -2,7 +2,7 @@ from tkinter import *
 import random
 
 window = Tk()
-window.title('Bhgnr Math')
+window.title('Math Obstacle Game')
 canvas = Canvas(window, width=800, height=600, bg = 'black')
 canvas.pack()
 
@@ -28,6 +28,12 @@ def make_operators():
     addition_color=random.choice(['light green', 'green', 'dark green'])
     multiplcation_color=random.choice(['cyan', 'light blue', 'blue', 'dark blue'])
     power_color=random.choice(['grey', 'black'])
+
+    xposition = random.randint(0, 600)
+    ender = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = multiplcation_color)
+    end_text = canvas.create_text(xposition+32, -32, text= chr(247)+ '0', font=('Cambria Math', 24, 'italic'), fill = 'Black')
+    enders_list.append([ender, end_text])
+    
     if random.randint(0,4) == 1:
         adder = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = addition_color)
         add_operation = random.randint(-31,16)
@@ -44,12 +50,6 @@ def make_operators():
         multiply_operation = random.randint(0,16)
         multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
         multipliers_list.append([multiplier, multiplier_text, multiply_operation])
-
-    if 1 == 1:
-        xposition = random.randint(0, 600)
-        ender = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = multiplcation_color)
-        end_text = canvas.create_text(xposition+32, -32, text= chr(247)+ '0', font=('Cambria Math', 24, 'italic'), fill = 'Black')
-        enders_list.append([ender, end_text])
 
     if random.randint(1,32) == 1:
         xposition = random.randint(0, 600)
@@ -213,4 +213,3 @@ window.after(1000, check_hits)
 window.after(1000, move_character)
 
 window.mainloop()
-
