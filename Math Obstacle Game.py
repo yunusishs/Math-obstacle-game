@@ -21,21 +21,20 @@ cubes = []
 
 adder_text = ''
 x_position=0
+
+def _from_rgb(rgb):
+    r, g, b = rgb
+    return f'#{r:02x}{g:02x}{b:02x}'
     
 def make_operators():
     global adder_text, x_position
     xposition = random.randint(0, 600)
-    addition_color=random.choice(['light green', 'green', 'dark green'])
-    multiplcation_color=random.choice(['cyan', 'light blue', 'blue', 'dark blue'])
-    power_color=random.choice(['grey', 'black'])
-
-    xposition = random.randint(0, 600)
-    ender = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = multiplcation_color)
+    ender = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = _from_rgb((random.randrange(256), random.randrange(256), random.randrange(256))))
     end_text = canvas.create_text(xposition+32, -32, text= chr(247)+ '0', font=('Cambria Math', 24, 'italic'), fill = 'Black')
     enders_list.append([ender, end_text])
     
-    if random.randint(0,4) == 1:
-        adder = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = addition_color)
+    if random.randrange(2) == 1:
+        adder = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = _from_rgb((random.randrange(256), random.randrange(256), random.randrange(256))))
         add_operation = random.randint(-31,16)
         if add_operation > 0:
             adder_text = canvas.create_text(xposition+32, -32, text= '+'+str(add_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
@@ -44,22 +43,22 @@ def make_operators():
         if add_operation != 0:
             adders_list.append([adder, adder_text, add_operation])
 
-    if (x < 0 and random.randint(0,16) == 1) or (x < 0):
+    if (x > 0 and random.randrange(16) == 1) or (x < 0):
         xposition = random.randint(0, 600)
-        multiplier = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = multiplcation_color)
+        multiplier = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = _from_rgb((random.randrange(256), random.randrange(256), random.randrange(256))))
         multiply_operation = random.randint(0,16)
         multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
         multipliers_list.append([multiplier, multiplier_text, multiply_operation])
 
-    if random.randint(1,32) == 1:
+    if random.randrange(16) == 1:
         xposition = random.randint(0, 600)
-        square = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = power_color)
+        square = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = _from_rgb((random.randrange(256), random.randrange(256), random.randrange(256))))
         square_text = canvas.create_text(xposition+32, -32, text='x'+ chr(178), font=('Cambria Math', 24, 'italic'), fill = 'white')
         squares.append([square, square_text, 'None'])
 
-    if (x < 0 and random.randint(0,8) == 1) or (x < 0):
+    if (x > 0 and random.randrange(8) == 1) or (x < 0):
         xposition = random.randint(0, 600)
-        cube = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = power_color)
+        cube = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = _from_rgb((random.randrange(256), random.randrange(256), random.randrange(256))))
         cube_text = canvas.create_text(xposition+32, -32, text='x'+ chr(179), font=('Cambria Math', 24, 'italic'), fill = 'white')
         cubes.append([cube, cube_text, 'None'])
     
