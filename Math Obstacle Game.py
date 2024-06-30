@@ -34,9 +34,17 @@ def make_operators():
 
     if (x > 0 and random.randrange(16) == 1) or (x < 0):
         multiplier = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = randcolour())
-        multiply_operation = random.randint(0,16)
-        multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
-        multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+        multiply_operation = random.randint(-1,8)
+        if multiply_operation == -1:
+            if random.randrange(2) == 1:
+                multiplier_text = canvas.create_text(xposition+32, -32, text= chr(247)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
+                multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+            else:
+                multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
+                multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+        else:
+            multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 24, 'italic'), fill = 'Black')
+            multipliers_list.append([multiplier, multiplier_text, multiply_operation])
 
     if random.randrange(16) == 1:
         square = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = randcolour())
@@ -76,17 +84,17 @@ def move_operators():
         xx=canvas.coords(player)[0]
         xy=canvas.coords(player)[1]
         if enderx > xx:
-            canvas.move(ender[0], -1,0)
-            canvas.move(ender[1], -1,0)
+            canvas.move(ender[0], -2,0)
+            canvas.move(ender[1], -2,0)
         if enderx < xx:
-            canvas.move(ender[0], 1, 0)
-            canvas.move(ender[1], 1, 0)
+            canvas.move(ender[0], 2, 0)
+            canvas.move(ender[1], 2, 0)
         if endery > xy:
-            canvas.move(ender[0], 0,-1)
-            canvas.move(ender[1], 0,-1)
+            canvas.move(ender[0], 0,-2)
+            canvas.move(ender[1], 0,-2)
         if endery < xy:
-            canvas.move(ender[0], 0, 1)
-            canvas.move(ender[1], 0, 1)
+            canvas.move(ender[0], 0, 2)
+            canvas.move(ender[1], 0, 2)
         if canvas.coords(ender[0])[1] > 600:
             canvas.delete(ender[0])
             canvas.delete(ender[1])
@@ -151,7 +159,7 @@ def check_hits():
             canvas.delete(cube[1])
             cubes.remove(cube)
     x_display.configure(text="x=" + str(x))
-    window.after(100, check_hits)
+    window.after(1, check_hits)
 
 def check_input(event):
     global move_direction
