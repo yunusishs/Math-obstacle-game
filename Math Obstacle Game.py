@@ -1,6 +1,5 @@
 from tkinter import *
 import random
-import statistics
 
 window = Tk()
 window.title('Math Obstacle Game')
