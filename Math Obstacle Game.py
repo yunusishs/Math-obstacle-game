@@ -67,64 +67,64 @@ def make_operators():
         cube_text = canvas.create_text(xposition+32, -32, text='x'+ chr(179), font=('Cambria Math', 20, 'italic'), fill = colour[1])
         cubes.append([cube, cube_text, 'None'])
     
-    window.after(1000, make_operators)
+    window.after(1024, make_operators)
     
 #[0] will mean the operator square
 #[1] will mean the text
 #[2] will mean the operation   
 def move_operators():
     for adder in adders_list:
-        canvas.move(adder[0], 0, 10)
-        canvas.move(adder[1], 0, 10)
+        canvas.move(adder[0], 0, 4)
+        canvas.move(adder[1], 0, 4)
         if canvas.coords(adder[0])[1] > canvas_height:
             canvas.delete(adder[0])
             canvas.delete(adder[1])
             adders_list.remove(adder)
     for multiplier in multipliers_list:
-        canvas.move(multiplier[0], 0, 10)
-        canvas.move(multiplier[1], 0, 10)
+        canvas.move(multiplier[0], 0, 4)
+        canvas.move(multiplier[1], 0, 4)
         if canvas.coords(multiplier[0])[1] > canvas_height:
             canvas.delete(multiplier[0])
             canvas.delete(multiplier[1])
             multipliers_list.remove(multiplier)
     for ender in enders_list:
-        canvas.move(ender[0], 0, 10)
-        canvas.move(ender[1], 0, 10)
+        canvas.move(ender[0], 0, 4)
+        canvas.move(ender[1], 0, 4)
         enderx=canvas.coords(ender[0])[0]
         endery=canvas.coords(ender[0])[1]
         xx=canvas.coords(player)[0]
         xy=canvas.coords(player)[1]
         if enderx > xx:
-            canvas.move(ender[0], -2,0)
-            canvas.move(ender[1], -2,0)
+            canvas.move(ender[0], -1,0)
+            canvas.move(ender[1], -1,0)
         if enderx < xx:
-            canvas.move(ender[0], 2, 0)
-            canvas.move(ender[1], 2, 0)
+            canvas.move(ender[0], 1, 0)
+            canvas.move(ender[1], 1, 0)
         if endery > xy:
-            canvas.move(ender[0], 0,-2)
-            canvas.move(ender[1], 0,-2)
+            canvas.move(ender[0], 0,-1)
+            canvas.move(ender[1], 0,-1)
         if endery < xy:
-            canvas.move(ender[0], 0, 2)
-            canvas.move(ender[1], 0, 2)
+            canvas.move(ender[0], 0, 1)
+            canvas.move(ender[1], 0, 1)
         if canvas.coords(ender[0])[1] > canvas_height:
             canvas.delete(ender[0])
             canvas.delete(ender[1])
             enders_list.remove(ender)
     for square in squares:
-        canvas.move(square[0], 0, 10)
-        canvas.move(square[1], 0, 10)
+        canvas.move(square[0], 0, 4)
+        canvas.move(square[1], 0, 4)
         if canvas.coords(square[0])[1] > canvas_height:
             canvas.delete(square[0])
             canvas.delete(square[1])
             squares.remove(square)
     for cube in cubes:
-        canvas.move(cube[0], 0, 10)
-        canvas.move(cube[1], 0, 10)
+        canvas.move(cube[0], 0, 4)
+        canvas.move(cube[1], 0, 4)
         if canvas.coords(cube[0])[1] > canvas_height:
             canvas.delete(cube[0])
             canvas.delete(cube[1])
             cubes.remove(cube)
-    window.after(50, move_operators)
+    window.after(16, move_operators)
 
 def collision(item1, item2, distance):
     xdistance = abs(canvas.coords(item1)[0] - canvas.coords(item2)[0])
@@ -173,7 +173,7 @@ def check_hits():
     window.after(1, check_hits)
 
 def check_input(event):
-    global move_direction
+    global move_direction, game_started
     key = event.keysym
     if key == "Right" or key.lower() == "d":
         move_direction = "Right"
@@ -183,6 +183,8 @@ def check_input(event):
         move_direction = "Up"
     elif key == "Down" or key.lower() == "s":
         move_direction = "Down"
+    elif key == "space":
+        game_started = True
         
 def end_input(event):
     global move_direction
@@ -203,13 +205,29 @@ def move_player():
         canvas.move(player_text, 0,10)
     window.after(16, move_player)
 
+def start_game():
+    if not game_started:
+        window.after(1, start_game)
+    if game_started:
+        canvas.delete(title)
+        canvas.delete(directions)
+        canvas.delete(press_to_start)
+        make_operators()
+        move_operators()
+        check_hits()
+        move_player()
+    
 #setup player x   
 x = 0
 x_display = Label(window, text="x=" + str(x), font=('Cambria Math', 16, 'italic'))
 x_display.pack()
 
-player = canvas.create_rectangle(canvas_width/2-32, canvas_height/2-32, canvas_width/2+32, canvas_height/2+32, fill='blue')
-player_text = canvas.create_text(canvas_width/2,canvas_height/2, text='x', font=('Cambria Math', 32, 'italic'), fill='white')
+player = canvas.create_rectangle(canvas_width/2-32, canvas_height/2+128, canvas_width/2+32, canvas_height/2+192, fill='blue')
+player_text = canvas.create_text(canvas_width/2,canvas_height/2+160, text='x', font=('Cambria Math', 32, 'italic'), fill='white')
+
+title = canvas.create_text(canvas_width/2, canvas_height/2-64, text= 'Math Obstacle Game', fill='white', font = ('consolas', 32,'bold'))
+directions = canvas.create_text(canvas_width/2, canvas_height/2, text= 'Get the highest score possible', fill='white', font = ('consolas', 24))
+press_to_start = canvas.create_text(canvas_width/2, canvas_height/2+64, text="Press 'space' to start", fill='white', font = ('consolas',16))
 
 #make lists
 adders_list = [] 
@@ -224,10 +242,9 @@ move_direction = 0
 canvas.bind_all('<KeyPress>', check_input) 
 canvas.bind_all('<KeyRelease>', end_input)
 
+game_started = False
+
 #run functions
-window.after(1000, make_operators)
-window.after(1000, move_operators)
-window.after(1000, check_hits)
-window.after(1000, move_player)
+start_game()
 
 window.mainloop()
