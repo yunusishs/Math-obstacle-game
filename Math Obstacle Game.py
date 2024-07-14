@@ -1,13 +1,6 @@
 from tkinter import *
 import random
 
-window = Tk()
-window.title('Math Obstacle Game')
-canvas_width = 1280
-canvas_height = 640
-canvas = Canvas(window, width=canvas_width, height=canvas_height, bg = 'black')
-canvas.pack()
-
 #colour functions
 def _from_rgb(rgb):
     r, g, b = rgb
@@ -19,111 +12,80 @@ def randcolour():
     blue = random.randrange(256)
     return [_from_rgb((red, green, blue)), _from_rgb((255-red, 255-green, 255-blue))]
 
-#making the operators    
-def make_operators():
-    global adder_text
-    xposition = random.randint(0, canvas_width-64)
-    colour = randcolour()
-    ender = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = colour[0])
-    end_text = canvas.create_text(xposition+32, -32, text= chr(247)+ '0', font=('Cambria Math', 20, 'italic'), fill = colour[1])
-    enders_list.append([ender, end_text])
+#making the operators
 
-    xposition = random.randint(0, canvas_width-64)
+def operator_configs():
+    global xposition, yposition, colour
+    xposition = random.randint(64, canvas_width)
+    yposition = random.randint(-1024, 0)
     colour = randcolour()
-    adder = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = colour[0])
-    add_operation = random.randint(-32,31)
+
+''' 
+[0] will mean the operator square
+[1] will mean the text
+[2] will mean the operation
+'''
+
+def make_operators():
+    operator_configs()
+    zero_division = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, fill = colour[0])
+    zero_division_text = canvas.create_text(xposition-32, yposition-32, text= chr(247)+ '0', font=('Cambria Math', 20, 'italic'), fill = colour[1])
+    zero_division_list.append([zero_division, zero_division_text])
+
+    operator_configs()
+    adder = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, fill = colour[0])
+    add_operation = 0
+    while add_operation == 0:
+        add_operation = random.randint(-32,32)
     if add_operation > 0:
-        adder_text = canvas.create_text(xposition+32, -32, text= '+'+str(add_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
+        display = '+'+str(add_operation)
     if add_operation < 0:
-        adder_text = canvas.create_text(xposition+32, -32, text= str(add_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-    if add_operation == 0:
-        if random.randrange(2) == 1:
-            adder_text = canvas.create_text(xposition+32, -32, text= '+'+str(add_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-        else:
-            adder_text = canvas.create_text(xposition+32, -32, text= '-'+str(add_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
+        display = str(add_operation)
+    adder_text = canvas.create_text(xposition-32, yposition-32, text= display, font=('Cambria Math', 20, 'italic'), fill = colour[1])
     adders_list.append([adder, adder_text, add_operation])
 
+    operator_configs()
     if (x > 0 and random.randrange(4) == 1) or (x < 0):
-        multiplier = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = colour[0])
-        multiply_operation = random.randint(-1,8)
+        multiplier = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, fill = colour[0])
+        multiply_operation = 1
+        while multiply_operation == 1:
+            multiply_operation = random.randint(-1,10)
         if multiply_operation == -1:
             if random.randrange(2) == 1:
-                multiplier_text = canvas.create_text(xposition+32, -32, text= chr(247)+str(multiply_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-                multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+                display = chr(247)+str(multiply_operation)
             else:
-                multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-                multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+                display = chr(215)+str(multiply_operation)
         else:
-            multiplier_text = canvas.create_text(xposition+32, -32, text= chr(215)+str(multiply_operation), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-            multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+            display = chr(215)+str(multiply_operation)
 
+        multiplier_text = canvas.create_text(xposition-32, yposition-32, text = display, font=('Cambria Math', 20, 'italic'), fill = colour[1])
+        multipliers_list.append([multiplier, multiplier_text, multiply_operation])
+        
+    operator_configs()
     if random.randrange(16) == 1:
-        square = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = colour[0])
-        square_text = canvas.create_text(xposition+32, -32, text='x'+ chr(178), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-        squares.append([square, square_text, 'None'])
-
+        square = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, fill = colour[0])
+        square_text = canvas.create_text(xposition-32, yposition-32, text='x'+ chr(178), font=('Cambria Math', 20, 'italic'), fill = colour[1])
+        squares_list.append([square, square_text])
+        
+    operator_configs()
     if (x > 0 and random.randrange(16) == 1) or (x < 0):
-        cube = canvas.create_rectangle(xposition, -64, xposition+64, 0, fill = colour[0])
-        cube_text = canvas.create_text(xposition+32, -32, text='x'+ chr(179), font=('Cambria Math', 20, 'italic'), fill = colour[1])
-        cubes.append([cube, cube_text, 'None'])
+        cube = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, 0, fill = colour[0])
+        cube_text = canvas.create_text(xposition-32, yposition-32, text='x'+ chr(179), font=('Cambria Math', 20, 'italic'), fill = colour[1])
+        cubes_list.append([cube, cube_text])
     
     window.after(1024, make_operators)
-    
-#[0] will mean the operator square
-#[1] will mean the text
-#[2] will mean the operation   
+        
 def move_operators():
-    for adder in adders_list:
-        canvas.move(adder[0], 0, 4)
-        canvas.move(adder[1], 0, 4)
-        if canvas.coords(adder[0])[1] > canvas_height:
-            canvas.delete(adder[0])
-            canvas.delete(adder[1])
-            adders_list.remove(adder)
-    for multiplier in multipliers_list:
-        canvas.move(multiplier[0], 0, 4)
-        canvas.move(multiplier[1], 0, 4)
-        if canvas.coords(multiplier[0])[1] > canvas_height:
-            canvas.delete(multiplier[0])
-            canvas.delete(multiplier[1])
-            multipliers_list.remove(multiplier)
-    for ender in enders_list:
-        canvas.move(ender[0], 0, 4)
-        canvas.move(ender[1], 0, 4)
-        enderx=canvas.coords(ender[0])[0]
-        endery=canvas.coords(ender[0])[1]
-        xx=canvas.coords(player)[0]
-        xy=canvas.coords(player)[1]
-        if enderx > xx:
-            canvas.move(ender[0], -1,0)
-            canvas.move(ender[1], -1,0)
-        if enderx < xx:
-            canvas.move(ender[0], 1, 0)
-            canvas.move(ender[1], 1, 0)
-        if endery > xy:
-            canvas.move(ender[0], 0,-1)
-            canvas.move(ender[1], 0,-1)
-        if endery < xy:
-            canvas.move(ender[0], 0, 1)
-            canvas.move(ender[1], 0, 1)
-        if canvas.coords(ender[0])[1] > canvas_height:
-            canvas.delete(ender[0])
-            canvas.delete(ender[1])
-            enders_list.remove(ender)
-    for square in squares:
-        canvas.move(square[0], 0, 4)
-        canvas.move(square[1], 0, 4)
-        if canvas.coords(square[0])[1] > canvas_height:
-            canvas.delete(square[0])
-            canvas.delete(square[1])
-            squares.remove(square)
-    for cube in cubes:
-        canvas.move(cube[0], 0, 4)
-        canvas.move(cube[1], 0, 4)
-        if canvas.coords(cube[0])[1] > canvas_height:
-            canvas.delete(cube[0])
-            canvas.delete(cube[1])
-            cubes.remove(cube)
+    for operator_list in lists:
+        if operator_list == zero_division_list:
+            pass
+        for operator in operator_list:
+            canvas.move(operator[0], 0, 4)
+            canvas.move(operator[1], 0, 4)
+            if canvas.coords(operator[0])[1] > canvas_height:
+                canvas.delete(operator[0])
+                canvas.delete(operator[1])
+                operator_list.remove(operator)
     window.after(16, move_operators)
 
 def collision(item1, item2, distance):
@@ -131,44 +93,25 @@ def collision(item1, item2, distance):
     ydistance = abs(canvas.coords(item1)[1] - canvas.coords(item2)[1])
     overlap = xdistance < distance and ydistance < distance
     return overlap
-
+            
 def check_hits():
     global x
-    for adder in adders_list:
-        if collision(player, adder[0], 64):
-            x = x + adder[2]
-            canvas.delete(adder[0])
-            canvas.delete(adder[1])
-            adders_list.remove(adder)
-            
-    for multiplier in multipliers_list:
-        if collision(player, multiplier[0], 64):
-            x = x*multiplier[2]
-            canvas.delete(multiplier[0])
-            canvas.delete(multiplier[1])
-            multipliers_list.remove(multiplier)
-            
-    for ender in enders_list:
-        if collision(player, ender[0], 64):
-            canvas.create_text(canvas_width/2,canvas_height/2, text='Game Over', font=('Cambria math', 32, 'italic'), fill='red')
-            x = x/0
-            canvas.delete(ender[0])
-            canvas.delete(ender[1])
-            enders_list.remove(ender)
-
-    for square in squares:
-        if collision(player, square[0], 64):
-            x = x*x
-            canvas.delete(square[0])
-            canvas.delete(square[1])
-            squares.remove(square)
-
-    for cube in cubes:
-        if collision(player, cube[0], 64):
-            x = x**3
-            canvas.delete(cube[0])
-            canvas.delete(cube[1])
-            cubes.remove(cube)
+    for operator_list in lists:
+        for operator in operator_list:
+            if collision(player, operator[0], 64):
+                if operator_list == adders_list:
+                    x = x + operator[2]
+                if operator_list == multipliers_list:
+                    x = x * operator[2]
+                if operator_list == zero_division_list:
+                    x = x/0
+                if operator_list == squares_list:
+                    x = x*x
+                if operator_list == cubes_list:
+                    x = x**3
+                canvas.delete(operator[0])
+                canvas.delete(operator[1])
+                operator_list.remove(operator)
     x_display.configure(text="x=" + str(x))
     window.after(1, check_hits)
 
@@ -216,7 +159,15 @@ def start_game():
         move_operators()
         check_hits()
         move_player()
-    
+        
+#set up window and canvas
+window = Tk()
+window.title('Math Obstacle Game')
+canvas_width = 1280
+canvas_height = 640
+canvas = Canvas(window, width=canvas_width, height=canvas_height, bg = 'black')
+canvas.pack()
+
 #setup player x   
 x = 0
 x_display = Label(window, text="x=" + str(x), font=('Cambria Math', 16, 'italic'))
@@ -232,9 +183,14 @@ press_to_start = canvas.create_text(canvas_width/2, canvas_height/2+64, text="Pr
 #make lists
 adders_list = [] 
 multipliers_list = []
-enders_list = []
-squares = []
-cubes = []
+zero_division_list = []
+squares_list = []
+cubes_list = []
+lists = [adders_list, multipliers_list, zero_division_list, squares_list, cubes_list]
+
+xposition = 0
+yposition = 0
+colour = 0
 
 #setup movement
 move_direction = 0
