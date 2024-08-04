@@ -69,7 +69,7 @@ def make_operators():
         
     operator_configs()
     if (x > 0 and random.randrange(16) == 1) or (x < 0):
-        cube = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, 0, fill = colour[0])
+        cube = canvas.create_rectangle(xposition, yposition, xposition-64, yposition-64, fill = colour[0])
         cube_text = canvas.create_text(xposition-32, yposition-32, text='x'+ chr(179), font=('Cambria Math', 20, 'italic'), fill = colour[1])
         cubes_list.append([cube, cube_text])
     
@@ -104,6 +104,7 @@ def check_hits():
                 if operator_list == multipliers_list:
                     x = x * operator[2]
                 if operator_list == zero_division_list:
+                    canvas.create_text(canvas.coords(player_text)[0], canvas.coords(player_text)[1], text='Game Over', font=('Cambria math', 32, 'italic'), fill='red')
                     x = x/0
                 if operator_list == squares_list:
                     x = x*x
