@@ -189,10 +189,6 @@ squares_list = []
 cubes_list = []
 lists = [adders_list, multipliers_list, zero_division_list, squares_list, cubes_list]
 
-xposition = 0
-yposition = 0
-colour = 0
-
 #setup movement
 move_direction = 0
 
